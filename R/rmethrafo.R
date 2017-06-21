@@ -12,16 +12,16 @@ bamScript <- function(bamFile,genome_size){
 	print(response)
 }
 
-predict<- function(genome_index,rpkm,model,out_prefix){
+predict<- function(genome_index,medip_rpkm,model,out_prefix){
 	path<- paste(system.file(package="rmethrafo"), "meth_predict.py", sep="/")
-	command<- paste("python", path,genome_index,rpkm,model,out_prefix)
+	command<- paste("python", path,genome_index,medip_rpkm,model,out_prefix)
 	response<-system(command)
 	print(response)
 }
 
-train<- function(gene_index,medip_rpkm,bs_seq,trained_model_prefix){
+train<- function(genome_index,medip_rpkm,bs_seq,trained_model_prefix){
 	path<-paste(system.file(package="rmethrafo"),"meth_train.py", sep="/")
-	command<-paste("python", path, genome_index,mdeip_rpkm,bs_seq,trained_model_prefix)
+	command<-paste("python", path, genome_index,medip_rpkm,bs_seq,trained_model_prefix)
 	response<-system(command)
 	print(response)
 }
