@@ -1,0 +1,9 @@
+Package: rmethrafo
+Type: Package
+Title: Methrafo: MeDIP-Seq methylation estimate using a Random Forest Regressor
+Version: 1.0
+Date: 2017-06-20
+Author: Jun Ding
+Maintainer: Jun Ding <jund@cs.cmu.edu>
+Description: estimate methylation based on MeDIP-Seq data using a Random Foest Regressor
+License: MIT 
