@@ -1,10 +1,9 @@
 #!/bin/bash
 # check operating system (linux or windows)
-echo "$OSTYPE"
-if [ "$OSTYPE" == "linux-gnu" ]; then
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
 	if [ -n "$(which apt-get)" ]; then
 		# samtools
-		echo "righton"
+		echo $OSTYPE
 		sudo apt-get install samtools
 		# bedtools
 		sudo apt-get install bedtools 
@@ -27,7 +26,8 @@ if [ "$OSTYPE" == "linux-gnu" ]; then
 	sudo pip install scipy
 	sudo pip install scikit-learn
 	
-elif [ "$OSTYPE" == "darwin"* ]; then 
+elif [[ "$OSTYPE" == "darwin"* ]]; then 
+	echo $OSTYPE
 	#install home brew
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	
@@ -51,4 +51,5 @@ elif [ "$OSTYPE" == "darwin"* ]; then
 else 
 	echo "Sorry, $OSTYPE is not supported,please use Linux or Mac OSX."
 	
+echo "done!"	
 fi
