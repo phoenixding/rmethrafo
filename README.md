@@ -146,7 +146,7 @@ methrafo.bamScript, methrafo.download, methrafo.train, methrafo.predict.
 	```R
 	rmethrafo::bamScript(bamFile,genome_size)
 	```
-	bamFile => bam file path
+	bamFile => bam file path  
 	genome_size file => chromosome sizes file path
 	
 	```
@@ -204,6 +204,27 @@ methrafo.bamScript, methrafo.download, methrafo.train, methrafo.predict.
 	```R
 	rmethrafo::predict("hg19","example_medip.bw","model/rr.pkl","example_out")
 	```
+	
+# TEST EXAMPLE
+We provided a test example inside the "test" folder. 
+"test.R" is the R script to perform the test on the example dataset. 
+
+```R
+library("rmethrafo")
+# download reference genome
+#rmethrafo::download("hg19","hg19")
+
+# process the bam file (bigWig from bam)
+rmethrafo::bamScript("example_medip.bam","hg19/hg19.chrom.sizes")
+
+
+# predict based on the bigwig file from bam
+rmethrafo::predict("hg19","example_medip.bam.sort.bam.bedGraph.sort.bw", paste(path.package("rmethrafo"),"model/rr.pkl",sep="/"),"e1_out")
+
+# predict based on the bigwig file directly
+rmethrafo::predict("hg19","example_medip.bw", paste(path.package("rmethrafo"),"model/rr.pkl",sep="/"),"e2_out")
+
+```
 	  
 # CREDITS
 
