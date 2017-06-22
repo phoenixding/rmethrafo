@@ -53,7 +53,7 @@ $ ./pre_install
 Note, you might need to close the terminal afterwards and open a new 
 terminal for the following processes. 
 
-manual dependencies installation (*skip this section if the automatic installation succeeded*):   
+manual dependencies installation (**skip this section if the automatic installation succeeded**):   
 
 * (1) samtools, bedtools  
 	For debian/ubuntu based linux, you can install samtools,bedtools directly by:
