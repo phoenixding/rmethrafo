@@ -123,9 +123,7 @@ $ R CMD INSTALL rmethrafo_1.0.tar.gz
 
 USAGE
 ========================================================================
-Please check the example dataset provided in the example folder at:    
-http://www.cs.cmu.edu/~jund/methrafo/example/   
-
+   
 The following 4 commands were provided by the methrafo package:   
 methrafo.bamScript, methrafo.download, methrafo.train, methrafo.predict.     
 
