@@ -202,7 +202,7 @@ methrafo.bamScript, methrafo.download, methrafo.train, methrafo.predict.
 	
 	example:  
 	```R
-	rmethrafo::download("hg19","example_medip.bw","model/rr.pkl","example_out")
+	rmethrafo::predict("hg19","example_medip.bw","model/rr.pkl","example_out")
 	```
 	  
 # CREDITS
