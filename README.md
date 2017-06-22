@@ -36,7 +36,7 @@ Python packages dependencies:
 -- numpy  
 -- pyBigWig
 
-External packages dependencies:
+External packages dependencies:  
 The software requires the following external packages to process bam files.
 (The following packages must be installed if you want to calculate methylation
 level based on raw bam files).
@@ -44,9 +44,16 @@ level based on raw bam files).
 --bedtools  
 --bedGraphToBigWig  
 
-We provided a pre-install shell script to install those dependencies automatically. 
+We provided a "pre_install" shell script to install those dependencies automatically. 
 However, please install them manually if the automatic installation fails. 
+```
+$ ./pre_install
+```
 
+Note, you might need to close the terminal afterwards and open a new 
+terminal for following processes. 
+
+manual dependencies installation:   
 
 * (1) samtools, bedtools  
 	For debian/ubuntu based linux, you can install samtools,bedtools directly by:
@@ -85,25 +92,33 @@ However, please install them manually if the automatic installation fails.
 	```
 	$export PATH=$PATH:~/path_to_bedGraphToWigBig_Folder
 	```
-	If you need it permanently, add the above command to your ~/.bashrc.  
+	If you need it permanently, add the above command to your ~/.profile  
 
 	Please refer to the following page for how to set $PATH on linux.  
 	http://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux
 
 # INSTALLATION
 
-First, download the software package.  
-Second, cd to the package directory.  
-Third, run setup.py script to install.  
+Open R and type in: 
+
+```R
+library(devtools)
+devtools::install_github("phoenixding/rmethrafo")
+```
+if devtools is not installed in your R, please install it by:
 
 
-Linux, Mac:  
+```R
+install.packages("devtools")
+
 ```
-$ sudo python setup.py install 
+
+Or, you can download the repository from github, then build and install 
+the R-package
+
 ```
-Or install using pip   
-```
-$sudo pip install methrafo
+$ R CMD build rmethrafo
+$ R CMD INSTALL rmethrafo_1.0.tar.gz
 ```
 
 USAGE
