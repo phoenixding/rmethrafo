@@ -127,6 +127,8 @@ def main():
 				chromi=fetchGenome(iid,gref)
 				cgv=cgVector(chromi)
 				sv=scoreVector(chromi,cgv,bwFile)
+				if (sum(sv)==0):
+					continue
 				nearcgs=nearbyCGVector(cgv,nearbycut)   # number of cgs nearby
 				FI=[]
 				for j in range(len(cgv)):
