@@ -125,7 +125,7 @@ USAGE
 ========================================================================
    
 The following 4 commands were provided by the methrafo package:   
-methrafo.bamScript, methrafo.download, methrafo.train, methrafo.predict.     
+rmethrafo::download, rmethrafo::bamScript, rmethrafo::train, rmethrafo::predict.     
 
 * *1) rmethrafo::download*   
 	This command is used to download the genome files.  
