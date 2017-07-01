@@ -15,6 +15,8 @@ from scipy.stats import spearmanr
 from sklearn.ensemble import RandomForestRegressor
 import math
 import cPickle as pickle
+import gc
+import numpy as np
 
 #-----------------------------------------------------------------------
 def fetchGenome(chrom_id,gref):
@@ -31,12 +33,24 @@ def cgVector(chrom):
 	cgV=[m.start() for m in re.finditer('CG',chrom_seq)]
 	return cgV
 	
-
-def scoreVector(chrom,cgv,bwFile):
+""""
+def scoreVector1(chrom,cgv,bwFile):
 	bw=pyBigWig.open(bwFile)
 	chrom_name=chrom[0]
 	sc=bw.values(chrom_name,0,len(chrom[1]))
 	sv=[0 if math.isnan(sc[item]) else sc[item]  for item in cgv ]
+	return sv
+"""	
+
+def scoreVector(chrom,cgv,bwFile):
+	bw=pyBigWig.open(bwFile)
+	chrom_name=chrom[0]
+	N=10 # split large list to reduce RAM usage
+	cgvL=np.array_split(cgv,N)
+	sv=[]
+	for l in cgvL:
+		sc=bw.values(chrom_name,l[0],l[-1]+1)
+		sv+=[0 if math.isnan(sc[item-l[0]]) else sc[item-l[0]]  for item in l]
 	return sv
 	
 def nearbyCGVector(cgv,nearbycut):
@@ -60,38 +74,31 @@ def nearbyCGVector(cgv,nearbycut):
 				rightcgs.append(j)
 			j=j+1
 		inearcgs=leftcgs+rightcgs
-		nearcgs.append(inearcgs)
+		nearcgs.append(len(inearcgs))
 	return nearcgs
-	
-def nearbyCGScoreVector(chrom,bwFile,cgv,nearcgs):
-	# the contribution of nearby CGs on current CG
-	nearcgsS=[]
-	bw=pyBigWig.open(bwFile)
-	chrom_name=chrom[0]
-	k=5 # distance weight parameter
-	for i in range(len(nearcgs)):
-		cgi=nearcgs[i]
-		si=0
-		for j in cgi:
-			dij=abs(cgv[j]-cgv[i])
-			try:
-				sj=bw.stats(chrom_name,cgv[j],cgv[j]+1)[0]
-			except:
-				sj=0
-			sj=0 if sj==None else sj
-			si+=(sj/dij)*k
-		nearcgsS.append(si)
-	return nearcgsS
 			
-def Vector2Wig(chri,cgv,rv):
+def Vector2Wig(chri,cgv,rv,f):
 	wigString="variableStep chrom="+chri+" span=2"
-	wigS=[]
+	f.write(wigString+'\n')
 	for i in range(len(cgv)):
-		wigS.append(str(cgv[i])+' '+str(rv[i]))
-	wigS='\n'.join(wigS)
-	wigString=wigString+'\n'+wigS
-	return wigString
+		f.write(str(cgv[i])+' '+str(rv[i])+'\n')
 	
+	
+	
+def getFeature(iid,gref,nearbycut,bwFile):
+	chromi=fetchGenome(iid,gref)
+	cgv=cgVector(chromi)
+	sv=scoreVector(chromi,cgv,bwFile)
+	
+	if (sum(sv)==0):
+		return None
+	nearcgs=nearbyCGVector(cgv,nearbycut)
+	FI=[]
+	for j in range(len(cgv)):
+		fij=[sv[j],nearcgs[j]]
+		FI.append(fij)
+	return [cgv,FI]
+		
 #----------------------------------------------------------------------
 
 
@@ -104,7 +111,7 @@ def main():
 		
 	gref=sys.argv[1]
 	chroms=os.listdir(gref)
-	dchrom={}
+
 	# bigwig file-MeDIP-seq
 	bwFile=sys.argv[2]
 	
@@ -123,22 +130,12 @@ def main():
 	for i in chroms:
 		if i[0:3]=='chr':
 			iid=i.split('.')[0]
+			print(iid)
 			try:
-				chromi=fetchGenome(iid,gref)
-				cgv=cgVector(chromi)
-				sv=scoreVector(chromi,cgv,bwFile)
-				if (sum(sv)==0):
-					continue
-				nearcgs=nearbyCGVector(cgv,nearbycut)   # number of cgs nearby
-				FI=[]
-				for j in range(len(cgv)):
-					fij=[sv[j],len(nearcgs[j])]
-					FI.append(fij)
-					
+				[cgv,FI]=getFeature(iid,gref,nearbycut,bwFile)
 				rv=list(rfregressor.predict(FI))
-				wig_rv=Vector2Wig(iid,cgv,rv)
-				f.write(wig_rv+'\n')
-				print(iid)
+				#rv=[rv[k] if sv[k]>0 else 0 for k in range(len(rv))]
+				Vector2Wig(iid,cgv,rv,f)	
 			except:
 				pass 
 	f.close()
