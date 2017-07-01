@@ -48,6 +48,10 @@ def main():
 	# sort bam files
 	subpx=subprocess.Popen(["samtools","sort",bamFile_pre,bamFile_pre+'.sort'],stdout=PIPE,stderr=PIPE)
 	stdout,stderr=subpx.communicate()
+	#pdb.set_trace()
+	if (len(stderr)>0):
+		subpx=subprocess.Popen(["samtools","sort","-o",bamFile_pre+".sort.bam", bamFile_pre],stdout=PIPE,stderr=PIPE)
+		stdout,stderr=subpx.communicate()
 	
 	bamFile=bamFile_pre+".sort.bam"
 	# get number of mapped reads
@@ -74,13 +78,15 @@ def main():
 	stdout,stderr=subp3.communicate()
 	
 	# remove temp files
+	
 	try:
 		os.remove(bamFile)
 		os.remove(bamFile+'.bedGraph')
 		os.remove(bamFile+'.bedGraph.sort')
+	
 	except:
 		pass 
-
+	
 if __name__=="__main__":
 	main()
 	
