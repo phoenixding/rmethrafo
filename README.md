@@ -23,9 +23,7 @@ MethRafo package in python.
 Linux, Mac OS
 
 # PREREQUISITES
-
 python 2.7.x
-
 It was installed by default for most Linux distributions and MAC.  
 If not, please refer to https://www.python.org/downloads/ for installation 
 instructions. 
@@ -117,7 +115,7 @@ Or, you can download the repository from github, then build and install
 the R-package
 
 ```
-$ R CMD build rmethrafo
+$ R CMD build rmethrafo-master
 $ R CMD INSTALL rmethrafo_1.0.tar.gz
 ```
 
