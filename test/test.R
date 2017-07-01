@@ -1,6 +1,6 @@
 library("rmethrafo")
 # download reference genome
-#rmethrafo::download("hg19","hg19")
+rmethrafo::download("hg19","hg19")
 
 # process the bam file (bigWig from bam)
 rmethrafo::bamScript("example_medip.bam","hg19/hg19.chrom.sizes")
